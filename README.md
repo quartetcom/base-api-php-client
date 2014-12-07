@@ -1,6 +1,6 @@
 # base-api-php-client
 
-[![Build Status](https://travis-ci.org/quartet/base-api-php-client.svg?branch=master)](https://travis-ci.org/quartet/base-api-php-client)
+[![Build Status](https://travis-ci.org/quartetcom/base-api-php-client.svg?branch=master)](https://travis-ci.org/quartetcom/base-api-php-client)
 
 PHP client library for accessing [BASE API](https://developers.thebase.in/).
 
