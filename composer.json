@@ -1,15 +1,32 @@
 {
-    "name": "quartet/baseapi",
-    "description":" ",
-    "keywords":[
-    ],
-    "config":{
+    "name": "quartet/base-api-php-client",
+    "description": "PHP client library for accessing BASE API.",
+    "keywords": ["BASE", "thebase"],
+    "homepage": "https://github.com/quartet/base-api-php-client",
+    "config": {
         "bin-dir": "bin"
     },
-    "license": "BSD-3-Clause",
-    "autoload":{
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Takashi Kanemoto",
+            "email": "kanemoto.takashi@gmail.com"
+        }
+    ],
+    "require": {
+        "league/oauth2-client": "0.*@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "autoload": {
         "psr-4":{
             "Quartet\\BaseApi\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
         }
     }
 }
