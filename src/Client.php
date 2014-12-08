@@ -31,6 +31,7 @@ class Client
             'clientSecret' => $clientSecret,
             'redirectUri' => $redirectUri,
             'scopes' => $scopes,
+            'scopeSeparator' => ' ',
         ]);
     }
 
