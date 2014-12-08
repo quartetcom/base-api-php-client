@@ -1,7 +1,7 @@
 <?php
 namespace Quartet\BaseApi\Entity;
 
-class User
+class User implements EntityInterface
 {
     public $shop_id;
     public $shop_name;

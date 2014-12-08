@@ -4,7 +4,7 @@ namespace Quartet\BaseApi\Api;
 use Quartet\BaseApi\Client;
 use Quartet\BaseApi\Entity\User;
 
-class Users
+class Users extends AbstractApi
 {
     /**
      * @var \Quartet\BaseApi\Client
@@ -16,6 +16,8 @@ class Users
      */
     public function __construct(Client $client)
     {
+        parent::__construct();
+
         $this->client = $client;
     }
 
@@ -28,15 +30,6 @@ class Users
 
         $data = json_decode($response->getBody(), true);
 
-        $user = new User();
-
-        $data = isset($data['user']) ? $data['user'] : [];
-        foreach ($data as $key => $value) {
-            if (property_exists($user, $key)) {
-                $user->$key = $data[$key];
-            }
-        }
-
-        return $user;
+        return $this->entityFactory->get('User', $data['user']);
     }
 }
