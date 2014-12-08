@@ -54,7 +54,7 @@ class Client
      * @param $method
      * @param $relativeUrl
      * @param array $params
-     * @return array|\Guzzle\Http\Message\Response|mixed|null
+     * @return \Guzzle\Http\Message\Response|null
      * @throws Exception\RuntimeException
      * @throws Exception\BaseApiException
      */
