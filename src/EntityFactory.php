@@ -28,7 +28,9 @@ class EntityFactory
 
         foreach ($properties as $key => $value) {
             if (property_exists($entity, $key)) {
-                $entity->$key = $properties[$key];
+                if (!is_array($value)) {
+                    $entity->$key = $properties[$key];
+                }
             }
         }
 
