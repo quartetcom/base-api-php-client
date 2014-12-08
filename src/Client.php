@@ -20,13 +20,15 @@ class Client
      * @param string $clientId
      * @param string $clientSecret
      * @param string $redirectUri
+     * @param array $scopes
      */
-    public function __construct($clientId, $clientSecret, $redirectUri = '')
+    public function __construct($clientId, $clientSecret, $redirectUri, $scopes = [])
     {
         $this->provider = new Base([
             'clientId' => $clientId,
             'clientSecret' => $clientSecret,
             'redirectUri' => $redirectUri,
+            'scopes' => $scopes,
         ]);
     }
 

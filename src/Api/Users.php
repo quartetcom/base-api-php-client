@@ -2,7 +2,6 @@
 namespace Quartet\BaseApi\Api;
 
 use Quartet\BaseApi\Client;
-use Quartet\BaseApi\Entity\User;
 
 class Users extends AbstractApi
 {
@@ -22,11 +21,11 @@ class Users extends AbstractApi
     }
 
     /**
-     * @return User
+     * @return \Quartet\BaseApi\Entity\User
      */
     public function me()
     {
-        $response = $this->client->request('get', '/1/users/me', ['scopes' => ['read_users', 'read_users_mail']]);
+        $response = $this->client->request('get', '/1/users/me');
 
         $data = json_decode($response->getBody(), true);
 
