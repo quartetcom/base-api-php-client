@@ -3,7 +3,10 @@ namespace Quartet\BaseApi;
 
 use Guzzle\Http\Client as HttpClient;
 use Guzzle\Http\Exception\BadResponseException;
+use League\OAuth2\Client\Provider\ProviderInterface;
+use League\OAuth2\Client\Token\AccessToken;
 use Quartet\BaseApi\Exception\BaseApiException;
+use Quartet\BaseApi\Exception\RuntimeException;
 use Quartet\BaseApi\Provider\Base;
 
 class Client
@@ -19,6 +22,11 @@ class Client
     private $provider;
 
     /**
+     * @var \Guzzle\Http\Client
+     */
+    private $httpClient;
+
+    /**
      * @param string $clientId
      * @param string $clientSecret
      * @param string $redirectUri
@@ -31,25 +39,29 @@ class Client
             'clientSecret' => $clientSecret,
             'redirectUri' => $redirectUri,
             'scopes' => $scopes,
-            'scopeSeparator' => ' ',
         ]);
+
+        $this->httpClient = new HttpClient(Base::BASE_URL);
     }
 
     /**
-     * @param string $method
-     * @param string $relativeUrl
+     * @param $method
+     * @param $relativeUrl
      * @param array $params
      * @return array|\Guzzle\Http\Message\Response|mixed|null
+     * @throws Exception\RuntimeException
      * @throws Exception\BaseApiException
      */
     public function request($method, $relativeUrl, array $params = [])
     {
-        $client = new HttpClient(Base::BASE_URL);
+        if (! $this->token instanceof AccessToken) {
+            throw new RuntimeException('Not authorized yet.');
+        }
 
-        $request = $client->createRequest($method, $relativeUrl, ['Authorization' => "Bearer {$this->token->accessToken}"], null, $params);
+        $request = $this->httpClient->createRequest($method, $relativeUrl, ['Authorization' => "Bearer {$this->token->accessToken}"], null, $params);
 
         try {
-            $response = $client->send($request);
+            $response = $this->httpClient->send($request);
         } catch (BadResponseException $e) {
             $response = json_decode($e->getResponse()->getBody(), true);
             throw new BaseApiException($response, $e->getResponse()->getStatusCode());
@@ -98,5 +110,27 @@ class Client
         return $this->token = $this->provider->getAccessToken('refresh_token', [
             'refresh_token' => $this->token->refreshToken,
         ]);
+    }
+
+    /**
+     * @param ProviderInterface $provider
+     * @return $this
+     */
+    public function setProvider(ProviderInterface $provider)
+    {
+        $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param HttpClient $httpClient
+     * @return $this
+     */
+    public function setHttpClient(HttpClient $httpClient)
+    {
+        $this->httpClient = $httpClient;
+
+        return $this;
     }
 }

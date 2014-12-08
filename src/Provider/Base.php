@@ -9,6 +9,13 @@ class Base extends AbstractProvider
 {
     const BASE_URL = 'https://api.thebase.in';
 
+    public function __construct(array $options = [])
+    {
+        parent::__construct(array_merge($options, [
+            'scopeSeparator' => ' ',
+        ]));
+    }
+
     public function urlAuthorize()
     {
         return self::BASE_URL . '/1/oauth/authorize';
