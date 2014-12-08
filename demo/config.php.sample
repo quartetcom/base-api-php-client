@@ -1,0 +1,4 @@
+<?php
+define('CLIENT_ID', 'BASE API client id here');
+define('CLIENT_SECRET', 'BASE API client secret here');
+define('REDIRECT_URI', 'BASE API callback url here');
