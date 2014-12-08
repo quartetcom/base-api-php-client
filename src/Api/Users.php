@@ -24,12 +24,7 @@ class Users
      */
     public function me()
     {
-        $response = $this->client->request('get', '/1/users/me', [
-            'scopes' => [
-                'read_users',
-                'read_users_mail'
-            ],
-        ]);
+        $response = $this->client->request('get', '/1/users/me', ['scopes' => ['read_users', 'read_users_mail']]);
 
         $data = json_decode($response->getBody(), true);
 
