@@ -2,6 +2,8 @@
 namespace Quartet\BaseApi;
 
 use Guzzle\Http\Client as HttpClient;
+use Guzzle\Http\Exception\BadResponseException;
+use Quartet\BaseApi\Exception\BaseApiException;
 use Quartet\BaseApi\Provider\Base;
 
 class Client
@@ -36,7 +38,8 @@ class Client
      * @param string $method
      * @param string $relativeUrl
      * @param array $params
-     * @return \Guzzle\Http\Message\Response
+     * @return array|\Guzzle\Http\Message\Response|mixed|null
+     * @throws Exception\BaseApiException
      */
     public function request($method, $relativeUrl, array $params = [])
     {
@@ -44,8 +47,12 @@ class Client
 
         $request = $client->createRequest($method, $relativeUrl, ['Authorization' => "Bearer {$this->token->accessToken}"], null, $params);
 
-        /** @var \Guzzle\Http\Message\Response $response */
-        $response = $client->send($request);
+        try {
+            $response = $client->send($request);
+        } catch (BadResponseException $e) {
+            $response = json_decode($e->getResponse()->getBody(), true);
+            throw new BaseApiException($response, $e->getResponse()->getStatusCode());
+        }
 
         return $response;
     }
