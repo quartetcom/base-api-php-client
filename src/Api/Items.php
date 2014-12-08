@@ -1,25 +1,8 @@
 <?php
 namespace Quartet\BaseApi\Api;
 
-use Quartet\BaseApi\Client;
-
 class Items extends AbstractApi
 {
-    /**
-     * @var \Quartet\BaseApi\Client
-     */
-    private $client;
-
-    /**
-     * @param Client $client
-     */
-    public function __construct(Client $client)
-    {
-        parent::__construct();
-
-        $this->client = $client;
-    }
-
     /**
      * @param array $params
      * @return \Quartet\BaseApi\Entity\Item[]
