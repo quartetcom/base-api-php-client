@@ -2,10 +2,11 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/config.php';
 
+use Quartet\BaseApi\Api\Items;
 use Quartet\BaseApi\Api\Users;
 use Quartet\BaseApi\Client;
 
-$client = new Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, ['read_users']);
+$client = new Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, ['read_users', 'read_items']);
 
 if (isset($_GET['code'])) {
     $client->authenticate($_GET['code']);
@@ -19,3 +20,9 @@ if (isset($_GET['code'])) {
 $usersApi = new Users($client);
 $user = $usersApi->me();
 var_dump($user->shop_name);
+
+$itemsApi = new Items($client);
+$items = $itemsApi->get();
+foreach ($items as $item) {
+    var_dump($item->title);
+}
