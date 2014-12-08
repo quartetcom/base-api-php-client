@@ -1,5 +1,5 @@
 {
-    "name": "quartet/base-api-php-client",
+    "name": "quartetcom/base-api-php-client",
     "description": "PHP client library for accessing BASE API.",
     "keywords": ["BASE", "thebase"],
     "homepage": "https://github.com/quartetcom/base-api-php-client",
