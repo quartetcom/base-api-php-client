@@ -5,12 +5,18 @@ use Guzzle\Http\Client as HttpClient;
 use Guzzle\Http\Exception\BadResponseException;
 use League\OAuth2\Client\Provider\ProviderInterface;
 use League\OAuth2\Client\Token\AccessToken;
+use Quartet\BaseApi\Exception\AccessTokenExpiredException;
 use Quartet\BaseApi\Exception\BaseApiException;
+use Quartet\BaseApi\Exception\RateLimitExceededException;
 use Quartet\BaseApi\Exception\RuntimeException;
 use Quartet\BaseApi\Provider\Base;
 
 class Client
 {
+    const ACCESS_TOKEN_EXPIRED_MESSAGE = 'アクセストークンが無効です。';
+    const REFRESH_TOKEN_EXPIRED_MESSAGE = 'リフレッシュトークンの有効期限が切れています。';
+    const RATE_LIMIT_EXCEEDED_MESSAGE = '1日のAPIの利用上限を超えました。日付が変わってからもう一度アクセスしてください。';
+
     /**
      * @var \League\OAuth2\Client\Token\AccessToken
      */
@@ -64,7 +70,19 @@ class Client
             $response = $this->httpClient->send($request);
         } catch (BadResponseException $e) {
             $response = json_decode($e->getResponse()->getBody(), true);
-            throw new BaseApiException($response, $e->getResponse()->getStatusCode());
+
+            switch ($response['error_description']) {
+                case self::ACCESS_TOKEN_EXPIRED_MESSAGE:
+                    $this->refresh();
+                    $response = $this->request($method, $relativeUrl, $params);
+                    break;
+
+                case self::RATE_LIMIT_EXCEEDED_MESSAGE:
+                    throw new RateLimitExceededException(self::RATE_LIMIT_EXCEEDED_MESSAGE);
+
+                default:
+                    throw new BaseApiException($response, $e->getResponse()->getStatusCode());
+            }
         }
 
         return $response;
@@ -107,9 +125,15 @@ class Client
      */
     public function refresh()
     {
-        return $this->token = $this->provider->getAccessToken('refresh_token', [
-            'refresh_token' => $this->token->refreshToken,
-        ]);
+        try {
+            $this->token = $this->provider->getAccessToken('refresh_token', [
+                'refresh_token' => $this->token->refreshToken,
+            ]);
+        } catch (BadResponseException $e) {
+            throw new AccessTokenExpiredException(self::REFRESH_TOKEN_EXPIRED_MESSAGE);
+        }
+
+        return $this->token;
     }
 
     /**
