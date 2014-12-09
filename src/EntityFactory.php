@@ -30,7 +30,7 @@ class EntityFactory
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $childEntityName = Inflector::singularize(Inflector::camelize($key));
+                $childEntityName = Inflector::singularize((string)Inflector::camelize($key));
 
                 switch (Hash::dimensions($value)) {
                     case 1: // entity.
