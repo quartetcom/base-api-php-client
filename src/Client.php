@@ -2,6 +2,7 @@
 namespace Quartet\BaseApi;
 
 use Guzzle\Http\Client as HttpClient;
+use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Exception\BadResponseException;
 use League\OAuth2\Client\Provider\ProviderInterface;
 use League\OAuth2\Client\Token\AccessToken;
@@ -37,17 +38,28 @@ class Client
      * @param string $clientSecret
      * @param string $redirectUri
      * @param array $scopes
+     * @param ProviderInterface $provider
+     * @param ClientInterface $httpClient
      */
-    public function __construct($clientId, $clientSecret, $redirectUri, $scopes = [])
+    public function __construct($clientId, $clientSecret, $redirectUri, $scopes = [], ProviderInterface $provider = null, ClientInterface $httpClient = null)
     {
-        $this->provider = new Base([
-            'clientId' => $clientId,
-            'clientSecret' => $clientSecret,
-            'redirectUri' => $redirectUri,
-            'scopes' => $scopes,
-        ]);
+        if (is_null($provider)) {
+            $this->provider = new Base([
+                'clientId' => $clientId,
+                'clientSecret' => $clientSecret,
+                'redirectUri' => $redirectUri,
+                'scopes' => $scopes,
+            ]);
+        } else {
+            $this->provider = $provider;
+        }
 
-        $this->httpClient = new HttpClient(Base::BASE_URL);
+        if (is_null($httpClient)) {
+            $this->httpClient = new HttpClient();
+        } else {
+            $this->httpClient = $httpClient;
+        }
+        $this->httpClient->setBaseUrl(Base::BASE_URL);
     }
 
     /**
@@ -134,27 +146,5 @@ class Client
         }
 
         return $this->token;
-    }
-
-    /**
-     * @param ProviderInterface $provider
-     * @return $this
-     */
-    public function setProvider(ProviderInterface $provider)
-    {
-        $this->provider = $provider;
-
-        return $this;
-    }
-
-    /**
-     * @param HttpClient $httpClient
-     * @return $this
-     */
-    public function setHttpClient(HttpClient $httpClient)
-    {
-        $this->httpClient = $httpClient;
-
-        return $this;
     }
 }

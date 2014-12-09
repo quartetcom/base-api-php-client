@@ -7,14 +7,9 @@ use Phake;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Client
-     */
-    private $client;
-
-    public function setUp()
+    private function buildClient($provider = null, $httpClient = null)
     {
-        $this->client = new Client('clientId', 'clientSecret', 'redirectUri');
+        return new Client('', '', '', [], $provider, $httpClient);
     }
 
     public function test_request()
@@ -24,17 +19,18 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         Phake::when($httpClient)->createRequest('method', '/path/to/api', ['Authorization' => 'Bearer access_token'], null, ['param' => 1])->thenReturn('request');
         Phake::when($httpClient)->send('request')->thenReturn('response');
 
-        $this->client->setHttpClient($httpClient);
-        $this->client->token = new AccessToken(['access_token' => 'access_token']);
+        $client = $this->buildClient(null, $httpClient);
+        $client->token = new AccessToken(['access_token' => 'access_token']);
 
-        $this->assertEquals('response', $this->client->request('method', '/path/to/api', ['param' => 1]));
+        $this->assertEquals('response', $client->request('method', '/path/to/api', ['param' => 1]));
     }
 
     public function test_request_before_authorized()
     {
         $this->setExpectedException('\Quartet\BaseApi\Exception\RuntimeException');
 
-        $this->client->request('method', '/path/to/api');
+        $client = $this->buildClient();
+        $client->request('method', '/path/to/api');
     }
 
     /**
@@ -47,17 +43,17 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         Phake::when($httpClient)->createRequest(Phake::anyParameters())->thenReturn('request');
         Phake::when($httpClient)->send('request')->thenThrow($exception);
 
-        $this->client->setHttpClient($httpClient);
-        $this->client->token = new AccessToken(['access_token' => 'access_token']);
+        $client = $this->buildClient(null, $httpClient);
+        $client->token = new AccessToken(['access_token' => 'access_token']);
 
         switch ($idx) {
             case 0:
                 $this->setExpectedException('\Quartet\BaseApi\Exception\RateLimitExceededException');
-                $this->client->request('method', '/path/to/api');
+                $client->request('method', '/path/to/api');
                 break;
             case 1:
                 $this->setExpectedException('\Quartet\BaseApi\Exception\BaseApiErrorResponseException');
-                $this->client->request('method', '/path/to/api');
+                $client->request('method', '/path/to/api');
                 break;
         }
     }
@@ -90,9 +86,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $provider = Phake::mock('\Quartet\BaseApi\Provider\Base');
 
-        $this->client->setProvider($provider);
+        $client = $this->buildClient($provider);
 
-        $this->client->authorize(['param' => 1]);
+        $client->authorize(['param' => 1]);
         Phake::verify($provider)->authorize(['param' => 1]);
     }
 
@@ -100,38 +96,38 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $provider = Phake::mock('\Quartet\BaseApi\Provider\Base');
 
-        $this->client->setProvider($provider);
+        $client = $this->buildClient($provider);
 
-        $this->client->getAuthorizationUrl(['param' => 1]);
+        $client->getAuthorizationUrl(['param' => 1]);
         Phake::verify($provider)->getAuthorizationUrl(['param' => 1]);
     }
 
     public function test_authenticate()
     {
-        $this->assertNull($this->client->token);
-
         $provider = Phake::mock('\Quartet\BaseApi\Provider\Base');
         Phake::when($provider)->getAccessToken(Phake::anyParameters())->thenReturn('token');
 
-        $this->client->setProvider($provider);
+        $client = $this->buildClient($provider);
 
-        $this->client->authenticate('test_code');
+        $this->assertNull($client->token);
+
+        $client->authenticate('test_code');
         Phake::verify($provider)->getAccessToken('authorization_code', ['code' => 'test_code']);
 
-        $this->assertEquals('token', $this->client->token);
+        $this->assertEquals('token', $client->token);
     }
 
     public function test_refresh()
     {
         $provider = Phake::mock('\Quartet\BaseApi\Provider\Base');
 
-        $this->client->setProvider($provider);
-        $this->client->token = new AccessToken([
+        $client = $this->buildClient($provider);
+        $client->token = new AccessToken([
             'access_token' => '',
             'refresh_token' => 'test_refresh_token'
         ]);
 
-        $this->client->refresh();
+        $client->refresh();
         Phake::verify($provider)->getAccessToken('refresh_token', ['refresh_token' => 'test_refresh_token']);
     }
 
@@ -142,14 +138,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $provider = Phake::mock('\Quartet\BaseApi\Provider\Base');
         Phake::when($provider)->getAccessToken(Phake::anyParameters())->thenThrow($exception);
 
-        $this->client->setProvider($provider);
-        $this->client->token = new AccessToken([
+        $client = $this->buildClient($provider);
+        $client->token = new AccessToken([
             'access_token' => '',
             'refresh_token' => 'test_refresh_token'
         ]);
 
         $this->setExpectedException('\Quartet\BaseApi\Exception\AccessTokenExpiredException');
-        $this->client->refresh();
+        $client->refresh();
     }
 
     private function getResponseException(array $responseBody = ['error' => 'error', 'error_description' => 'error_description'])
