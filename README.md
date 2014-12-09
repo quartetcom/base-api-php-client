@@ -14,12 +14,13 @@ PHP client library for accessing [BASE API](https://developers.thebase.in/).
 
 ## Getting started
 
-Just add this dependency into your `composer.json`:
+Just add these dependency into your `composer.json`:
 
 ```json
 {
     "require": {
-        "quartetcom/base-api-php-client": "1.0.*@dev"
+        "quartetcom/base-api-php-client": "1.0.*@dev",
+        "cakephp/utility": "3.0.*@beta"
     }
 }
 ```

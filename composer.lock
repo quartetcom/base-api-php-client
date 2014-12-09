@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "272374bcc54597e778c0584e775d33cf",
+    "hash": "d11bc6a27edc5e45dfcdcb7441c4a8f1",
     "packages": [
         {
             "name": "cakephp/utility",
@@ -133,16 +133,16 @@
         },
         {
             "name": "league/oauth2-client",
-            "version": "dev-master",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-client.git",
-                "reference": "a6eb0742ca7f4b9112465c7314463b236b9a016c"
+                "reference": "6629d503967cad624bfad45f30488d5c5929145e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/a6eb0742ca7f4b9112465c7314463b236b9a016c",
-                "reference": "a6eb0742ca7f4b9112465c7314463b236b9a016c",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/6629d503967cad624bfad45f30488d5c5929145e",
+                "reference": "6629d503967cad624bfad45f30488d5c5929145e",
                 "shasum": ""
             },
             "require": {
@@ -157,7 +157,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.6.x-dev"
+                    "dev-master": "0.5.x-dev"
                 }
             },
             "autoload": {
@@ -188,7 +188,7 @@
                 "oauth2",
                 "single sign on"
             ],
-            "time": "2014-12-03 16:10:56"
+            "time": "2014-12-03 15:38:13"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1101,7 +1101,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "league/oauth2-client": 20,
         "cakephp/utility": 10,
         "phake/phake": 20
     },

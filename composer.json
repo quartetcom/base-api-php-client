@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "league/oauth2-client": "0.*@dev",
+        "league/oauth2-client": "0.*",
         "cakephp/utility": "3.0.*@beta"
     },
     "require-dev": {
