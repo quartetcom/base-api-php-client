@@ -6,7 +6,7 @@ use Guzzle\Http\Exception\BadResponseException;
 use League\OAuth2\Client\Provider\ProviderInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Quartet\BaseApi\Exception\AccessTokenExpiredException;
-use Quartet\BaseApi\Exception\BaseApiException;
+use Quartet\BaseApi\Exception\BaseApiErrorResponseException;
 use Quartet\BaseApi\Exception\RateLimitExceededException;
 use Quartet\BaseApi\Exception\RuntimeException;
 use Quartet\BaseApi\Provider\Base;
@@ -56,7 +56,7 @@ class Client
      * @param array $params
      * @return \Guzzle\Http\Message\Response|null
      * @throws Exception\RuntimeException
-     * @throws Exception\BaseApiException
+     * @throws Exception\BaseApiErrorResponseException
      */
     public function request($method, $relativeUrl, array $params = [])
     {
@@ -69,9 +69,9 @@ class Client
         try {
             $response = $this->httpClient->send($request);
         } catch (BadResponseException $e) {
-            $response = json_decode($e->getResponse()->getBody(), true);
+            $body = json_decode($e->getResponse()->getBody(), true);
 
-            switch ($response['error_description']) {
+            switch ($body['error_description']) {
                 case self::ACCESS_TOKEN_EXPIRED_MESSAGE:
                     $this->refresh();
                     $response = $this->request($method, $relativeUrl, $params);
@@ -81,7 +81,7 @@ class Client
                     throw new RateLimitExceededException(self::RATE_LIMIT_EXCEEDED_MESSAGE);
 
                 default:
-                    throw new BaseApiException($response, $e->getResponse()->getStatusCode());
+                    throw new BaseApiErrorResponseException($body, $e->getResponse()->getStatusCode());
             }
         }
 

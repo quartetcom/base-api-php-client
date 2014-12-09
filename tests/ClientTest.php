@@ -56,7 +56,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 $this->client->request('method', '/path/to/api');
                 break;
             case 1:
-                $this->setExpectedException('\Quartet\BaseApi\Exception\BaseApiException');
+                $this->setExpectedException('\Quartet\BaseApi\Exception\BaseApiErrorResponseException');
                 $this->client->request('method', '/path/to/api');
                 break;
         }
