@@ -1,7 +1,5 @@
 <?php
-namespace Quartet\BaseApi\Entity\Item;
-
-use Quartet\BaseApi\Entity\EntityInterface;
+namespace Quartet\BaseApi\Entity;
 
 class Variation implements EntityInterface
 {

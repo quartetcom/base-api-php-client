@@ -14,14 +14,8 @@ class Items extends AbstractApi
         $data = json_decode($response->getBody(), true);
 
         $items = [];
-        foreach ($data['items'] as $itemArray) {
-            $variations = [];
-            foreach ($itemArray['variations'] as $variationArray) {
-                $variations[] = $this->entityFactory->get('Item\\Variation', $variationArray);
-            }
-            $item = $this->entityFactory->get('Item', $itemArray);
-            $item->variations = $variations;
-            $items[] = $item;
+        foreach ($data['items'] as $item) {
+            $items[] = $this->entityFactory->get('Item', $item);
         }
 
         return $items;
