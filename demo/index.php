@@ -1,4 +1,8 @@
 <?php
+/**
+ * Place this file on the path which is accessible with your REDIRECT URI.
+ */
+
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/config.php';
 
