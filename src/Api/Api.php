@@ -4,7 +4,7 @@ namespace Quartet\BaseApi\Api;
 use Quartet\BaseApi\Client;
 use Quartet\BaseApi\EntityFactory;
 
-class AbstractApi
+class Api
 {
     /**
      * @var \Quartet\BaseApi\EntityFactory

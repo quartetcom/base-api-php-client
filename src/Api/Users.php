@@ -1,7 +1,7 @@
 <?php
 namespace Quartet\BaseApi\Api;
 
-class Users extends AbstractApi
+class Users extends Api
 {
     /**
      * @return \Quartet\BaseApi\Entity\User

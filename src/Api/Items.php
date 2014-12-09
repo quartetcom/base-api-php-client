@@ -4,7 +4,7 @@ namespace Quartet\BaseApi\Api;
 use Quartet\BaseApi\Entity\Item;
 use Quartet\BaseApi\Exception\MissingRequiredParameterException;
 
-class Items extends AbstractApi
+class Items extends Api
 {
     /**
      * @param array $params
