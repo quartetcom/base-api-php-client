@@ -1,6 +1,9 @@
 <?php
 namespace Quartet\BaseApi\Api;
 
+use Quartet\BaseApi\Entity\Item;
+use Quartet\BaseApi\Exception\MissingRequiredParameterException;
+
 class Items extends AbstractApi
 {
     /**
@@ -34,8 +37,41 @@ class Items extends AbstractApi
         return $this->entityFactory->get('Item', $data['item']);
     }
 
-    public function add()
+    /**
+     * @param Item $item
+     * @return \Quartet\BaseApi\Entity\EntityInterface
+     * @throws \Quartet\BaseApi\Exception\MissingRequiredParameterException
+     */
+    public function add(Item $item)
     {
+        if (is_null($item->title) || is_null($item->price) || is_null($item->stock)) {
+            throw new MissingRequiredParameterException;
+        }
+
+        $params = [
+            'title' => $item->title,
+            'detail' => $item->detail,
+            'price' => $item->price,
+            'stock' => $item->stock,
+            'visible' => $item->visible,
+            'identifier' => $item->identifier,
+            'list_order' => $item->list_order,
+        ];
+
+        $i = 0;
+        foreach ($item->variations as $variation) {
+            /** @var \Quartet\BaseApi\Entity\Variation $variation */
+            $params['variation'][$i] = $variation->variation;
+            $params['variation_stock'][$i] = $variation->variation_stock;
+            $params['variation_identifier'][$i] = $variation->variation_identifier;
+            $i++;
+        }
+
+        $response = $this->client->request('post', '/1/items/add', $params);
+
+        $data = json_decode($response->getBody(), true);
+
+        return $this->entityFactory->get('Item', $data['item']);
     }
 
     public function edit()
