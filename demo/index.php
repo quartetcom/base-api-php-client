@@ -28,5 +28,6 @@ var_dump($user->shop_name);
 $itemsApi = new Items($client);
 $items = $itemsApi->get();
 foreach ($items as $item) {
-    var_dump($item->title);
+    $detail = $itemsApi->detail($item->item_id);
+    var_dump($detail);
 }

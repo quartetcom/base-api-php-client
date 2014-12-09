@@ -21,8 +21,17 @@ class Items extends AbstractApi
         return $items;
     }
 
-    public function detail()
+    /**
+     * @param string $id
+     * @return \Quartet\BaseApi\Entity\EntityInterface
+     */
+    public function detail($id)
     {
+        $response = $this->client->request('get', "/1/items/detail/{$id}");
+
+        $data = json_decode($response->getBody(), true);
+
+        return $this->entityFactory->get('Item', $data['item']);
     }
 
     public function add()
