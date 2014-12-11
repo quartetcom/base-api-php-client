@@ -29,7 +29,7 @@ class Client
     private $provider;
 
     /**
-     * @var \Guzzle\Http\Client
+     * @var \Guzzle\Http\ClientInterface
      */
     private $httpClient;
 
