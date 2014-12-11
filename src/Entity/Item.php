@@ -58,5 +58,9 @@ class Item implements EntityInterface
     public $img5_sp_640;
 
     public $modified;
+
+    /**
+     * @var Variation[]
+     */
     public $variations;
 }

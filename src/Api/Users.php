@@ -12,6 +12,6 @@ class Users extends Api
 
         $data = json_decode($response->getBody(), true);
 
-        return $this->entityFactory->get('User', $data['user']);
+        return $this->entityManager->getEntity('User', $data['user']);
     }
 }

@@ -2,23 +2,28 @@
 namespace Quartet\BaseApi\Api;
 
 use Quartet\BaseApi\Client;
-use Quartet\BaseApi\EntityFactory;
+use Quartet\BaseApi\EntityManager;
 
 class Api
 {
     /**
-     * @var \Quartet\BaseApi\EntityFactory
+     * @var \Quartet\BaseApi\EntityManager
      */
-    protected $entityFactory;
+    protected $entityManager;
 
     /**
      * @var \Quartet\BaseApi\Client
      */
     protected $client;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, EntityManager $entityManager = null)
     {
-        $this->entityFactory = new EntityFactory;
+        if (is_null($entityManager)) {
+            $this->entityManager = new EntityManager;
+        } else {
+            $this->entityManager = $entityManager;
+        }
+
         $this->client = $client;
     }
 }
