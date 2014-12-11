@@ -196,7 +196,7 @@ class TestEntity implements EntityInterface
     public $test_entity;
     public $test_entities;
 
-    public function __construct($scalar = null, $array = null, $test_entity = null, $test_entities = null)
+    public function __construct($scalar = null, array $array = null, EntityInterface $test_entity = null, array $test_entities = null)
     {
         $this->scalar = $scalar;
         $this->array = $array;

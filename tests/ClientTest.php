@@ -2,12 +2,14 @@
 
 namespace Quartet\BaseApi;
 
+use Guzzle\Http\ClientInterface;
+use League\OAuth2\Client\Provider\ProviderInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Phake;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
-    private function buildClient($provider = null, $httpClient = null)
+    private function buildClient(ProviderInterface $provider = null, ClientInterface $httpClient = null)
     {
         return new Client('', '', '', [], $provider, $httpClient);
     }
