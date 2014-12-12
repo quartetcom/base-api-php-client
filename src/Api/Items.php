@@ -12,7 +12,7 @@ class Items extends Api
      * @param string $sort
      * @param int $limit
      * @param int $offset
-     * @return array
+     * @return \Quartet\BaseApi\Entity\Item[]
      */
     public function get($order = 'list_order', $sort = 'asc', $limit = 20, $offset = 0)
     {
@@ -56,7 +56,7 @@ class Items extends Api
     }
 
     /**
-     * @param Item $item
+     * @param \Quartet\BaseApi\Entity\Item $item
      * @return \Quartet\BaseApi\Entity\Item
      * @throws \Quartet\BaseApi\Exception\MissingRequiredParameterException
      */
@@ -76,8 +76,8 @@ class Items extends Api
     }
 
     /**
-     * @param Item $item
-     * @return \Quartet\BaseApi\Entity\EntityInterface
+     * @param \Quartet\BaseApi\Entity\Item $item
+     * @return \Quartet\BaseApi\Entity\Item
      * @throws \Quartet\BaseApi\Exception\MissingRequiredParameterException
      */
     public function edit(Item $item)
@@ -158,7 +158,7 @@ class Items extends Api
      * @param int|string|null $stock
      * @param int|string|null $variation_id
      * @param int|string|null $variation_stock
-     * @return \Quartet\BaseApi\Entity\EntityInterface
+     * @return \Quartet\BaseApi\Entity\Item
      * @throws \Quartet\BaseApi\Exception\InvalidParameterException
      */
     public function edit_stock($item_id, $stock = null, $variation_id = null, $variation_stock = null)
@@ -179,7 +179,7 @@ class Items extends Api
     /**
      * @param int|string $item_id
      * @param int|string $variation_id
-     * @return \Quartet\BaseApi\Entity\EntityInterface
+     * @return \Quartet\BaseApi\Entity\Item
      */
     public function delete_variation($item_id, $variation_id)
     {
