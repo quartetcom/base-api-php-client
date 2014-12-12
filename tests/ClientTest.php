@@ -1,5 +1,4 @@
 <?php
-
 namespace Quartet\BaseApi;
 
 use Guzzle\Http\ClientInterface;
