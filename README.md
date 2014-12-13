@@ -25,6 +25,17 @@ Just add these dependencies into your `composer.json`:
 }
 ```
 
+or
+
+```json
+{
+    "require": {
+        "quartetcom/base-api-php-client": "1.0.*@dev"
+    },
+    "minimum-stability": "beta"
+}
+```
+
 ## Usage
 
 Sorry, now under developing.
