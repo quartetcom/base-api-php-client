@@ -19,17 +19,17 @@ class Client
     const RATE_LIMIT_EXCEEDED_MESSAGE = '1日のAPIの利用上限を超えました。日付が変わってからもう一度アクセスしてください。';
 
     /**
-     * @var \League\OAuth2\Client\Token\AccessToken
+     * @var AccessToken
      */
     public $token;
 
     /**
-     * @var \League\OAuth2\Client\Provider\ProviderInterface
+     * @var ProviderInterface
      */
     private $provider;
 
     /**
-     * @var \Guzzle\Http\ClientInterface
+     * @var ClientInterface
      */
     private $httpClient;
 
@@ -63,12 +63,13 @@ class Client
     }
 
     /**
-     * @param $method
-     * @param $relativeUrl
+     * @param string $method
+     * @param string $relativeUrl
      * @param array $params
      * @return \Guzzle\Http\Message\Response|null
-     * @throws Exception\RuntimeException
      * @throws Exception\BaseApiErrorResponseException
+     * @throws Exception\RuntimeException
+     * @throws Exception\RateLimitExceededException
      */
     public function request($method, $relativeUrl, array $params = [])
     {
@@ -122,7 +123,7 @@ class Client
 
     /**
      * @param string $code
-     * @return \League\OAuth2\Client\Token\AccessToken
+     * @return AccessToken
      */
     public function authenticate($code)
     {
@@ -134,7 +135,7 @@ class Client
     }
 
     /**
-     * @return \League\OAuth2\Client\Token\AccessToken
+     * @return AccessToken
      */
     public function refresh()
     {

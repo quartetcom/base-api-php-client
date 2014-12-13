@@ -6,7 +6,7 @@ use Quartet\BaseApi\Entity\Category;
 class Categories extends Api
 {
     /**
-     * @return \Quartet\BaseApi\Entity\Category[]
+     * @return Category[]
      */
     public function get()
     {
@@ -21,8 +21,8 @@ class Categories extends Api
     }
 
     /**
-     * @param \Quartet\BaseApi\Entity\Category $category
-     * @return \Quartet\BaseApi\Entity\Category[]
+     * @param Category $category
+     * @return Category[]
      * @throws MissingRequiredParameterException
      */
     public function add(Category $category)
@@ -44,8 +44,8 @@ class Categories extends Api
     }
 
     /**
-     * @param \Quartet\BaseApi\Entity\Category $category
-     * @return \Quartet\BaseApi\Entity\Category[]
+     * @param Category $category
+     * @return Category[]
      * @throws MissingRequiredParameterException
      */
     public function edit(Category $category)
@@ -68,7 +68,7 @@ class Categories extends Api
 
     /**
      * @param int|string $category_id
-     * @return \Quartet\BaseApi\Entity\Category[]
+     * @return Category[]
      */
     public function delete($category_id)
     {

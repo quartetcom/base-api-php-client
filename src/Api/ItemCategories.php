@@ -7,7 +7,7 @@ class ItemCategories extends Api
 {
     /**
      * @param int|string $item_id
-     * @return \Quartet\BaseApi\Entity\ItemCategory[]
+     * @return ItemCategory[]
      */
     public function detail($item_id)
     {
@@ -22,8 +22,8 @@ class ItemCategories extends Api
     }
 
     /**
-     * @param \Quartet\BaseApi\Entity\ItemCategory $itemCategory
-     * @return \Quartet\BaseApi\Entity\ItemCategory[]
+     * @param ItemCategory $itemCategory
+     * @return ItemCategory[]
      * @throws MissingRequiredParameterException
      */
     public function add(ItemCategory $itemCategory)
@@ -47,7 +47,7 @@ class ItemCategories extends Api
 
     /**
      * @param int|string $item_category_id
-     * @return \Quartet\BaseApi\Entity\ItemCategory[]
+     * @return ItemCategory[]
      */
     public function delete($item_category_id)
     {

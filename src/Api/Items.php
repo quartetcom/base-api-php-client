@@ -12,7 +12,7 @@ class Items extends Api
      * @param string $sort
      * @param int $limit
      * @param int $offset
-     * @return \Quartet\BaseApi\Entity\Item[]
+     * @return Item[]
      */
     public function get($order = 'list_order', $sort = 'asc', $limit = 20, $offset = 0)
     {
@@ -42,7 +42,7 @@ class Items extends Api
 
     /**
      * @param int|string $item_id
-     * @return \Quartet\BaseApi\Entity\EntityInterface
+     * @return Item
      */
     public function detail($item_id)
     {
@@ -52,9 +52,9 @@ class Items extends Api
     }
 
     /**
-     * @param \Quartet\BaseApi\Entity\Item $item
-     * @return \Quartet\BaseApi\Entity\Item
-     * @throws \Quartet\BaseApi\Exception\MissingRequiredParameterException
+     * @param Item $item
+     * @return Item
+     * @throws MissingRequiredParameterException
      */
     public function add(Item $item)
     {
@@ -70,9 +70,9 @@ class Items extends Api
     }
 
     /**
-     * @param \Quartet\BaseApi\Entity\Item $item
-     * @return \Quartet\BaseApi\Entity\Item
-     * @throws \Quartet\BaseApi\Exception\MissingRequiredParameterException
+     * @param Item $item
+     * @return Item
+     * @throws MissingRequiredParameterException
      */
     public function edit(Item $item)
     {
@@ -104,8 +104,8 @@ class Items extends Api
      * @param int|string $item_id
      * @param int|string $image_no
      * @param string $image_url
-     * @return \Quartet\BaseApi\Entity\EntityInterface
-     * @throws \Quartet\BaseApi\Exception\InvalidParameterException
+     * @return Item
+     * @throws InvalidParameterException
      */
     public function add_image($item_id, $image_no, $image_url)
     {
@@ -123,8 +123,8 @@ class Items extends Api
     /**
      * @param int|string $item_id
      * @param int|string $image_no
-     * @return \Quartet\BaseApi\Entity\EntityInterface
-     * @throws \Quartet\BaseApi\Exception\InvalidParameterException
+     * @return Item
+     * @throws InvalidParameterException
      */
     public function delete_image($item_id, $image_no)
     {
@@ -144,8 +144,8 @@ class Items extends Api
      * @param int|string|null $stock
      * @param int|string|null $variation_id
      * @param int|string|null $variation_stock
-     * @return \Quartet\BaseApi\Entity\Item
-     * @throws \Quartet\BaseApi\Exception\InvalidParameterException
+     * @return Item
+     * @throws InvalidParameterException
      */
     public function edit_stock($item_id, $stock = null, $variation_id = null, $variation_stock = null)
     {
@@ -163,7 +163,7 @@ class Items extends Api
     /**
      * @param int|string $item_id
      * @param int|string $variation_id
-     * @return \Quartet\BaseApi\Entity\Item
+     * @return Item
      */
     public function delete_variation($item_id, $variation_id)
     {
