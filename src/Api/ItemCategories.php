@@ -11,9 +11,7 @@ class ItemCategories extends Api
      */
     public function detail($item_id)
     {
-        $response = $this->client->request('post', "/1/item_categories/detail/{$item_id}");
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', "/1/item_categories/detail/{$item_id}");
 
         $itemCategories = [];
         foreach ($data['item_categories'] as $itemCategory) {
@@ -36,9 +34,7 @@ class ItemCategories extends Api
 
         $params = $this->entityManager->getFlatArray($itemCategory);
 
-        $response = $this->client->request('post', '/1/item_categories/add', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/item_categories/add', $params);
 
         $itemCategories = [];
         foreach ($data['item_categories'] as $itemCategory) {
@@ -55,11 +51,9 @@ class ItemCategories extends Api
      */
     public function delete($item_category_id)
     {
-        $response = $this->client->request('post', '/1/item_categories/delete', [
+        $data = $this->client->request('post', '/1/item_categories/delete', [
             'item_category_id' => $item_category_id,
         ]);
-
-        $data = json_decode($response->getBody(), true);
 
         $itemCategories = [];
         foreach ($data['item_categories'] as $itemCategory) {

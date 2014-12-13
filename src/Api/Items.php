@@ -30,9 +30,7 @@ class Items extends Api
 
         $params = compact('order', 'sort', 'limit', 'offset');
 
-        $response = $this->client->request('get', '/1/items', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('get', '/1/items', $params);
 
         $items = [];
         foreach ($data['items'] as $item) {
@@ -48,9 +46,7 @@ class Items extends Api
      */
     public function detail($item_id)
     {
-        $response = $this->client->request('get', "/1/items/detail/{$item_id}");
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('get', "/1/items/detail/{$item_id}");
 
         return $this->entityManager->getEntity('Item', $data['item']);
     }
@@ -68,9 +64,7 @@ class Items extends Api
 
         $params = $this->entityManager->getFlatArray($item);
 
-        $response = $this->client->request('post', '/1/items/add', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/items/add', $params);
 
         return $this->entityManager->getEntity('Item', $data['item']);
     }
@@ -88,9 +82,7 @@ class Items extends Api
 
         $params = $this->entityManager->getFlatArray($item);
 
-        $response = $this->client->request('post', '/1/items/edit', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/items/edit', $params);
 
         return $this->entityManager->getEntity('Item', $data['item']);
     }
@@ -101,11 +93,9 @@ class Items extends Api
      */
     public function delete($item_id)
     {
-        $response = $this->client->request('post', '/1/items/delete', [
+        $data = $this->client->request('post', '/1/items/delete', [
             'item_id' => $item_id,
         ]);
-
-        $data = json_decode($response->getBody(), true);
 
         return $data['result'] === 'true';
     }
@@ -125,9 +115,7 @@ class Items extends Api
 
         $params = compact('item_id', 'image_no', 'image_url');
 
-        $response = $this->client->request('post', '/1/items/add_image', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/items/add_image', $params);
 
         return $this->entityManager->getEntity('Item', $data['item']);
     }
@@ -146,9 +134,7 @@ class Items extends Api
 
         $params = compact('item_id', 'image_no');
 
-        $response = $this->client->request('post', '/1/items/delete_image', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/items/delete_image', $params);
 
         return $this->entityManager->getEntity('Item', $data['item']);
     }
@@ -169,9 +155,7 @@ class Items extends Api
 
         $params = array_filter(compact('item_id', 'stock', 'variation_id', 'variation_stock'));
 
-        $response = $this->client->request('post', '/1/items/edit_stock', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/items/edit_stock', $params);
 
         return $this->entityManager->getEntity('Item', $data['item']);
     }
@@ -185,9 +169,7 @@ class Items extends Api
     {
         $params = compact('item_id', 'variation_id');
 
-        $response = $this->client->request('post', '/1/items/delete_variation', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/items/delete_variation', $params);
 
         return $this->entityManager->getEntity('Item', $data['item']);
     }

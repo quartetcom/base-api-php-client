@@ -8,9 +8,7 @@ class Users extends Api
      */
     public function me()
     {
-        $response = $this->client->request('get', '/1/users/me');
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('get', '/1/users/me');
 
         return $this->entityManager->getEntity('User', $data['user']);
     }

@@ -80,14 +80,17 @@ class Client
 
         try {
             $response = $this->httpClient->send($request);
+            $body = json_decode($response->getBody(), true);
+
+            return $body;
+
         } catch (BadResponseException $e) {
             $body = json_decode($e->getResponse()->getBody(), true);
 
             switch ($body['error_description']) {
                 case self::ACCESS_TOKEN_EXPIRED_MESSAGE:
                     $this->refresh();
-                    $response = $this->request($method, $relativeUrl, $params);
-                    break;
+                    return $this->request($method, $relativeUrl, $params);
 
                 case self::RATE_LIMIT_EXCEEDED_MESSAGE:
                     throw new RateLimitExceededException(self::RATE_LIMIT_EXCEEDED_MESSAGE);
@@ -96,8 +99,6 @@ class Client
                     throw new BaseApiErrorResponseException($body, $e->getResponse()->getStatusCode());
             }
         }
-
-        return $response;
     }
 
     /**

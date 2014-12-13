@@ -10,9 +10,7 @@ class Categories extends Api
      */
     public function get()
     {
-        $response = $this->client->request('get', '/1/categories');
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('get', '/1/categories');
 
         $categories = [];
         foreach ($data['categories'] as $category) {
@@ -35,9 +33,7 @@ class Categories extends Api
 
         $params = $this->entityManager->getFlatArray($category);
 
-        $response = $this->client->request('post', '/1/categories/add', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/categories/add', $params);
 
         $categories = [];
         foreach ($data['categories'] as $category) {
@@ -60,9 +56,7 @@ class Categories extends Api
 
         $params = $this->entityManager->getFlatArray($category);
 
-        $response = $this->client->request('post', '/1/categories/edit', $params);
-
-        $data = json_decode($response->getBody(), true);
+        $data = $this->client->request('post', '/1/categories/edit', $params);
 
         $categories = [];
         foreach ($data['categories'] as $category) {
@@ -78,11 +72,9 @@ class Categories extends Api
      */
     public function delete($category_id)
     {
-        $response = $this->client->request('post', '/1/categories/delete', [
+        $data = $this->client->request('post', '/1/categories/delete', [
             'category_id' => $category_id,
         ]);
-
-        $data = json_decode($response->getBody(), true);
 
         $categories = [];
         foreach ($data['categories'] as $category) {

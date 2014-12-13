@@ -15,15 +15,19 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function test_request()
     {
+        // mock http response.
+        $response = Phake::mock('\Guzzle\Http\Message\Response');
+        Phake::when($response)->getBody()->thenReturn(json_encode(['json' => 'test']));
+
         // mock http client.
         $httpClient = Phake::mock('\Guzzle\Http\Client');
         Phake::when($httpClient)->createRequest('method', '/path/to/api', ['Authorization' => 'Bearer access_token'], null, ['param' => 1])->thenReturn('request');
-        Phake::when($httpClient)->send('request')->thenReturn('response');
+        Phake::when($httpClient)->send('request')->thenReturn($response);
 
         $client = $this->buildClient(null, $httpClient);
         $client->token = new AccessToken(['access_token' => 'access_token']);
 
-        $this->assertEquals('response', $client->request('method', '/path/to/api', ['param' => 1]));
+        $this->assertEquals(['json' => 'test'], $client->request('method', '/path/to/api', ['param' => 1]));
     }
 
     public function test_request_before_authorized()
@@ -39,20 +43,38 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     public function test_request_with_http_errors($idx, $exception)
     {
+        // mock http response.
+        $response = Phake::mock('\Guzzle\Http\Message\Response');
+        Phake::when($response)->getBody()->thenReturn(json_encode(['json' => 'test']));
+
         // mock http client.
         $httpClient = Phake::mock('\Guzzle\Http\Client');
-        Phake::when($httpClient)->createRequest(Phake::anyParameters())->thenReturn('request');
+        Phake::when($httpClient)->createRequest(Phake::anyParameters())->thenReturn('request')->thenReturn('second request');
         Phake::when($httpClient)->send('request')->thenThrow($exception);
+        Phake::when($httpClient)->send('second request')->thenReturn($response);
 
-        $client = $this->buildClient(null, $httpClient);
-        $client->token = new AccessToken(['access_token' => 'access_token']);
+        $token = new AccessToken([
+            'access_token' => 'access token',
+            'refresh_token' => 'refresh token',
+        ]);
+
+        // mock oauth2 provider.
+        $provider = Phake::mock('\Quartet\BaseApi\Provider\Base');
+        Phake::when($provider)->getAccessToken(Phake::anyParameters())->thenReturn($token);
+
+        $client = $this->buildClient($provider, $httpClient);
+        $client->token = $token;
 
         switch ($idx) {
             case 0:
+                $data = $client->request('method', '/path/to/api');
+                $this->assertEquals(['json' => 'test'], $data);
+                break;
+            case 1:
                 $this->setExpectedException('\Quartet\BaseApi\Exception\RateLimitExceededException');
                 $client->request('method', '/path/to/api');
                 break;
-            case 1:
+            case 2:
                 $this->setExpectedException('\Quartet\BaseApi\Exception\BaseApiErrorResponseException');
                 $client->request('method', '/path/to/api');
                 break;
@@ -65,8 +87,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function responseExceptionProvider()
     {
         $messages = [
-            0 => Client::RATE_LIMIT_EXCEEDED_MESSAGE,
-            1 => 'default exception',
+            0 => Client::ACCESS_TOKEN_EXPIRED_MESSAGE,
+            1 => Client::RATE_LIMIT_EXCEEDED_MESSAGE,
+            2 => 'default exception',
         ];
 
         $data = [];
@@ -112,8 +135,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($client->token);
 
-        $client->authenticate('test_code');
-        Phake::verify($provider)->getAccessToken('authorization_code', ['code' => 'test_code']);
+        $client->authenticate('test code');
+        Phake::verify($provider)->getAccessToken('authorization_code', ['code' => 'test code']);
 
         $this->assertEquals('token', $client->token);
     }
@@ -125,11 +148,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = $this->buildClient($provider);
         $client->token = new AccessToken([
             'access_token' => '',
-            'refresh_token' => 'test_refresh_token'
+            'refresh_token' => 'test refresh token',
         ]);
 
         $client->refresh();
-        Phake::verify($provider)->getAccessToken('refresh_token', ['refresh_token' => 'test_refresh_token']);
+        Phake::verify($provider)->getAccessToken('refresh_token', ['refresh_token' => 'test refresh token']);
     }
 
     public function test_refresh_with_http_error()
@@ -142,14 +165,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = $this->buildClient($provider);
         $client->token = new AccessToken([
             'access_token' => '',
-            'refresh_token' => 'test_refresh_token'
+            'refresh_token' => 'test refresh token',
         ]);
 
         $this->setExpectedException('\Quartet\BaseApi\Exception\AccessTokenExpiredException');
         $client->refresh();
     }
 
-    private function getResponseException(array $responseBody = ['error' => 'error', 'error_description' => 'error_description'])
+    private function getResponseException(array $responseBody = ['error' => 'error', 'error_description' => 'error description'])
     {
         // mock response.
         $response = Phake::mock('\Guzzle\Http\Message\Response');
