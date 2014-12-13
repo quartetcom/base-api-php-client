@@ -14,8 +14,8 @@ class ItemCategories extends Api
         $data = $this->client->request('post', "/1/item_categories/detail/{$item_id}");
 
         $itemCategories = [];
-        foreach ($data['item_categories'] as $itemCategory) {
-            $itemCategories[] = $this->entityManager->getEntity('ItemCategory', $itemCategory);
+        foreach ($data['item_categories'] as $itemCategoryArray) {
+            $itemCategories[] = $this->entityManager->getEntity('ItemCategory', $itemCategoryArray);
         }
 
         return $itemCategories;
@@ -37,8 +37,8 @@ class ItemCategories extends Api
         $data = $this->client->request('post', '/1/item_categories/add', $params);
 
         $itemCategories = [];
-        foreach ($data['item_categories'] as $itemCategory) {
-            $itemCategories[] = $this->entityManager->getEntity('Category', $itemCategory);
+        foreach ($data['item_categories'] as $itemCategoryArray) {
+            $itemCategories[] = $this->entityManager->getEntity('Category', $itemCategoryArray);
         }
 
         return $itemCategories;
@@ -51,13 +51,13 @@ class ItemCategories extends Api
      */
     public function delete($item_category_id)
     {
-        $data = $this->client->request('post', '/1/item_categories/delete', [
-            'item_category_id' => $item_category_id,
-        ]);
+        $params = compact('item_category_id');
+
+        $data = $this->client->request('post', '/1/item_categories/delete', $params);
 
         $itemCategories = [];
-        foreach ($data['item_categories'] as $itemCategory) {
-            $itemCategories[] = $this->entityManager->getEntity('Category', $itemCategory);
+        foreach ($data['item_categories'] as $itemCategoryArray) {
+            $itemCategories[] = $this->entityManager->getEntity('Category', $itemCategoryArray);
         }
 
         return $itemCategories;

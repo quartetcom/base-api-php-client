@@ -33,8 +33,8 @@ class Items extends Api
         $data = $this->client->request('get', '/1/items', $params);
 
         $items = [];
-        foreach ($data['items'] as $item) {
-            $items[] = $this->entityManager->getEntity('Item', $item);
+        foreach ($data['items'] as $itemArray) {
+            $items[] = $this->entityManager->getEntity('Item', $itemArray);
         }
 
         return $items;
@@ -93,9 +93,9 @@ class Items extends Api
      */
     public function delete($item_id)
     {
-        $data = $this->client->request('post', '/1/items/delete', [
-            'item_id' => $item_id,
-        ]);
+        $params = compact('item_id');
+
+        $data = $this->client->request('post', '/1/items/delete', $params);
 
         return $data['result'] === 'true';
     }

@@ -13,8 +13,8 @@ class Categories extends Api
         $data = $this->client->request('get', '/1/categories');
 
         $categories = [];
-        foreach ($data['categories'] as $category) {
-            $categories[] = $this->entityManager->getEntity('Category', $category);
+        foreach ($data['categories'] as $categoryArray) {
+            $categories[] = $this->entityManager->getEntity('Category', $categoryArray);
         }
 
         return $categories;
@@ -36,8 +36,8 @@ class Categories extends Api
         $data = $this->client->request('post', '/1/categories/add', $params);
 
         $categories = [];
-        foreach ($data['categories'] as $category) {
-            $categories[] = $this->entityManager->getEntity('Category', $category);
+        foreach ($data['categories'] as $categoryArray) {
+            $categories[] = $this->entityManager->getEntity('Category', $categoryArray);
         }
 
         return $categories;
@@ -59,8 +59,8 @@ class Categories extends Api
         $data = $this->client->request('post', '/1/categories/edit', $params);
 
         $categories = [];
-        foreach ($data['categories'] as $category) {
-            $categories[] = $this->entityManager->getEntity('Category', $category);
+        foreach ($data['categories'] as $categoryArray) {
+            $categories[] = $this->entityManager->getEntity('Category', $categoryArray);
         }
 
         return $categories;
@@ -72,13 +72,13 @@ class Categories extends Api
      */
     public function delete($category_id)
     {
-        $data = $this->client->request('post', '/1/categories/delete', [
-            'category_id' => $category_id,
-        ]);
+        $params = compact('category_id');
+
+        $data = $this->client->request('post', '/1/categories/delete', $params);
 
         $categories = [];
-        foreach ($data['categories'] as $category) {
-            $categories[] = $this->entityManager->getEntity('Category', $category);
+        foreach ($data['categories'] as $categoryArray) {
+            $categories[] = $this->entityManager->getEntity('Category', $categoryArray);
         }
 
         return $categories;
