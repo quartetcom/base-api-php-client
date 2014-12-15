@@ -5,7 +5,7 @@ use Quartet\BaseApi\Entity\Item;
 use Quartet\BaseApi\Exception\InvalidParameterException;
 use Quartet\BaseApi\Exception\MissingRequiredParameterException;
 
-class Items extends Api
+class Items extends AbstractApi
 {
     /**
      * @param string $order

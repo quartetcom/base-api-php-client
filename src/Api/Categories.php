@@ -4,7 +4,7 @@ namespace Quartet\BaseApi\Api;
 use Quartet\BaseApi\Entity\Category;
 use Quartet\BaseApi\Exception\MissingRequiredParameterException;
 
-class Categories extends Api
+class Categories extends AbstractApi
 {
     /**
      * @return Category[]

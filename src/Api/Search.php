@@ -5,7 +5,7 @@ use Quartet\BaseApi\Client;
 use Quartet\BaseApi\EntityManager;
 use Quartet\BaseApi\Exception\InvalidParameterException;
 
-class Search extends Api
+class Search extends AbstractApi
 {
     private $sortableFields;
     private $searchableFields;

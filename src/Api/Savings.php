@@ -3,7 +3,7 @@ namespace Quartet\BaseApi\Api;
 
 use Quartet\BaseApi\Exception\InvalidParameterException;
 
-class Savings extends Api
+class Savings extends AbstractApi
 {
     /**
      * @param string|null $start_created

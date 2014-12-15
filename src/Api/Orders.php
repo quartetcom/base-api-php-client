@@ -3,7 +3,7 @@ namespace Quartet\BaseApi\Api;
 
 use Quartet\BaseApi\Exception\InvalidParameterException;
 
-class Orders extends Api
+class Orders extends AbstractApi
 {
     /**
      * @param string|null $start_ordered

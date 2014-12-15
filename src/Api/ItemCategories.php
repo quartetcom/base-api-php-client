@@ -4,7 +4,7 @@ namespace Quartet\BaseApi\Api;
 use Quartet\BaseApi\Entity\ItemCategory;
 use Quartet\BaseApi\Exception\MissingRequiredParameterException;
 
-class ItemCategories extends Api
+class ItemCategories extends AbstractApi
 {
     /**
      * @param int|string $item_id
