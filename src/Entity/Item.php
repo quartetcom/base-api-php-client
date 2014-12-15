@@ -60,7 +60,7 @@ class Item implements EntityInterface
     public $modified;
 
     /**
-     * @var Variation[]
+     * @var Subset\Variation[]
      */
     public $variations;
 }

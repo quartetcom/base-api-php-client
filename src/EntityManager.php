@@ -16,10 +16,22 @@ class EntityManager
      */
     public function getEntity($entityName, array $data = [])
     {
-        $class = __NAMESPACE__ . '\\Entity\\' . trim($entityName, '\\');
+        $class = '';
 
-        if (!class_exists($class)) {
-            throw new LogicException("Class \"{$class}\" is undefined.");
+        $classCandidates = [
+            __NAMESPACE__ . '\\Entity\\' . trim($entityName, '\\'),
+            __NAMESPACE__ . '\\Entity\\Subset\\' . trim($entityName, '\\'),
+        ];
+
+        foreach ($classCandidates as $classCandidate) {
+            if (class_exists($classCandidate)) {
+                $class = $classCandidate;
+                break;
+            }
+        }
+
+        if (!$class) {
+            throw new LogicException("Entity \"{$entityName}\" is undefined.");
         }
 
         $entity = new $class;
