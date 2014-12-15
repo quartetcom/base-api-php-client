@@ -6,17 +6,15 @@
 [![Latest Stable Version](https://poser.pugx.org/quartetcom/base-api-php-client/v/stable.svg)](https://packagist.org/packages/quartetcom/base-api-php-client)
 [![Total Downloads](https://poser.pugx.org/quartetcom/base-api-php-client/downloads.svg)](https://packagist.org/packages/quartetcom/base-api-php-client)
 
-[日本語はこちら](README.ja.md)
+[BASE API](https://developers.thebase.in/) を PHP で利用するためのクライアントライブラリです。
 
-PHP client library for accessing [BASE API](https://developers.thebase.in/).
-
-## Requirements
+## 要件
 
 * PHP 5.4+
 
-## Getting started
+## 導入
 
-Just add this dependency into your `composer.json` as below:
+`composer.json` に以下のいずれかの方法で依存を追加してください。
 
 ```json
 {
@@ -27,7 +25,7 @@ Just add this dependency into your `composer.json` as below:
 }
 ```
 
-or:
+または
 
 ```json
 {
@@ -38,7 +36,7 @@ or:
 }
 ```
 
-## Usage
+## 使用方法
 
 ```php
 $clientId     = '2aacd57f14ffe6edafd402934593a0ce';
@@ -50,21 +48,21 @@ $scopes = [
     'read_items',
 ];
 
-// Initialize BASE API client object.
+// BASE API クライアントオブジェクトを初期化.
 $client = new Quartet\BaseApi\Client($clientId, $clientSecret, $callbackUrl, $scopes);
 
-// OAuth.
+// OAuth 認証.
 if (isset($_GET['code'])) {
-    $client->authenticate($_GET['code']);   // authenticate with query string of 'code'.
+    $client->authenticate($_GET['code']);   // クエリパラメータに認可コードがセットされていたらそのコードで認証.
 } else {
-    $client->authorize();                   // redirect to BASE authorization page and get code.
+    $client->authorize();                   // そうでなければ BASE の認証画面へリダイレクト.
 }
 
-// Call APIs via API Classes.
+// 各種 API は、API クラス群経由で使用します.
 $usersApi = new Quartet\BaseApi\Api\Users($client);
 $user = $usersApi->me();
 
-// You got response from API as an object.
+// API からのレスポンスはオブジェクトの形で取得されます.
 var_dump($user);
 
 // object(Quartet\BaseApi\Entity\User)[30]
@@ -81,9 +79,9 @@ var_dump($user);
 //   public 'mail_address' => null
 ```
 
-You can see demo code [here](demo/index.php).
+[こちら](demo/index.php) にデモコードもありますので、ご参照ください。
 
-## See also
+## 関連リンク
 
 * [BASE Developers](https://developers.thebase.in/)
 * [BASE API v1 ドキュメント (β版)](https://gist.github.com/baseinc/9634675)
