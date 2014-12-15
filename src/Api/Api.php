@@ -7,14 +7,14 @@ use Quartet\BaseApi\EntityManager;
 class Api
 {
     /**
-     * @var \Quartet\BaseApi\EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * @var \Quartet\BaseApi\Client
+     * @var Client
      */
     protected $client;
+
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
 
     public function __construct(Client $client, EntityManager $entityManager = null)
     {
@@ -25,5 +25,21 @@ class Api
         }
 
         $this->client = $client;
+    }
+
+    /**
+     * @return Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->entityManager;
     }
 }

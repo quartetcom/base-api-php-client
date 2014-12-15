@@ -97,7 +97,7 @@ class Items extends Api
 
         $data = $this->client->request('post', '/1/items/delete', $params);
 
-        return $data['result'] === 'true';
+        return $data['result'];
     }
 
     /**

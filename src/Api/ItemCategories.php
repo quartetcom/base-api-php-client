@@ -2,6 +2,7 @@
 namespace Quartet\BaseApi\Api;
 
 use Quartet\BaseApi\Entity\ItemCategory;
+use Quartet\BaseApi\Exception\MissingRequiredParameterException;
 
 class ItemCategories extends Api
 {
@@ -11,7 +12,7 @@ class ItemCategories extends Api
      */
     public function detail($item_id)
     {
-        $data = $this->client->request('post', "/1/item_categories/detail/{$item_id}");
+        $data = $this->client->request('get', "/1/item_categories/detail/{$item_id}");
 
         $itemCategories = [];
         foreach ($data['item_categories'] as $itemCategoryArray) {
@@ -38,7 +39,7 @@ class ItemCategories extends Api
 
         $itemCategories = [];
         foreach ($data['item_categories'] as $itemCategoryArray) {
-            $itemCategories[] = $this->entityManager->getEntity('Category', $itemCategoryArray);
+            $itemCategories[] = $this->entityManager->getEntity('ItemCategory', $itemCategoryArray);
         }
 
         return $itemCategories;
@@ -57,7 +58,7 @@ class ItemCategories extends Api
 
         $itemCategories = [];
         foreach ($data['item_categories'] as $itemCategoryArray) {
-            $itemCategories[] = $this->entityManager->getEntity('Category', $itemCategoryArray);
+            $itemCategories[] = $this->entityManager->getEntity('ItemCategory', $itemCategoryArray);
         }
 
         return $itemCategories;
