@@ -33,7 +33,7 @@ class Base extends AbstractProvider
 
     public function userDetails($response, AccessToken $token)
     {
-        $user = new User();
+        $user = new User;
         $user->exchangeArray([
             'uid' => $response->user->shop_id,
             'name' => $response->user->shop_name,
