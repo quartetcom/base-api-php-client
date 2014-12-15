@@ -3,6 +3,7 @@ namespace Quartet\BaseApi;
 
 use Phake;
 use Quartet\BaseApi\Api\Orders;
+use Quartet\BaseApi\Api\Search;
 
 class FunctionalTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,6 +55,28 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $order->c_c_payment_transaction->collected_fee);
         $this->assertEquals(null, $order->cvs_payment_transaction->collected_fee);
         $this->assertEquals(124, $order->order_items[1]->order_item_id);
+    }
+
+    /**
+     * @group functional
+     * @group search
+     */
+    public function test_search_get()
+    {
+        $this->setFixture(__FUNCTION__);
+        $searchApi = new Search($this->client);
+        $result = $searchApi->get('', '', '');
+
+        $this->assertInstanceOf('\Quartet\BaseApi\Entity\SearchResult', $result);
+        $this->assertEquals(2, $result->found);
+        $this->assertEquals(0, $result->start);
+
+        $this->assertInstanceOf('\Quartet\BaseApi\Entity\Item', $result->items[0]);
+        $this->assertEquals(2234, $result->items[1]->item_id);
+        $this->assertEquals('shop', $result->items[1]->shop_id);
+        $this->assertEquals('BASEショップ', $result->items[1]->shop_name);
+        $this->assertEquals('http://shop.thebase.in', $result->items[1]->shop_url);
+        $this->assertEquals(['Tシャツ', '奇抜'], $result->items[1]->categories);
     }
 
     private function setFixture($testFunctionName)
