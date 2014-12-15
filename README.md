@@ -14,7 +14,7 @@ PHP client library for accessing [BASE API](https://developers.thebase.in/).
 
 ## Getting started
 
-Just add these dependencies into your `composer.json`:
+Just add this dependency into your `composer.json` as below:
 
 ```json
 {
