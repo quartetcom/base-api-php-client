@@ -15,12 +15,15 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
         $this->em = Phake::mock('\Quartet\BaseApi\EntityManager');
     }
 
-    public function test_get()
+    /**
+     * @dataProvider parametersProvider
+     */
+    public function test_get($order, $sort, $limit, $isValid)
     {
         Phake::when($this->client)->request('get', '/1/items', [
-            'order' => 'list_order',
-            'sort' => 'asc',
-            'limit' => 20,
+            'order' => $order,
+            'sort' => $sort,
+            'limit' => $limit,
             'offset' => 0,
         ])->thenReturn([
             'items' => [
@@ -37,26 +40,27 @@ class ItemsTest extends \PHPUnit_Framework_TestCase
 
         $expected = ['entity1', 'entity2', 'entity3'];
 
-        $this->assertEquals($expected, $itemsApi->get());
+        if (!$isValid) {
+            $this->setExpectedException('\Quartet\BaseApi\Exception\InvalidParameterException');
+        }
+        $this->assertEquals($expected, $itemsApi->get($order, $sort, $limit));
     }
 
-    /**
-     * @dataProvider invalidParametersProvider
-     */
-    public function test_get_with_invalid_parameters($order, $sort, $limit)
-    {
-        $itemsApi = new Items($this->client, $this->em);
-
-        $this->setExpectedException('\Quartet\BaseApi\Exception\InvalidParameterException');
-        $itemsApi->get($order, $sort, $limit);
-    }
-
-    public function invalidParametersProvider()
+    public function parametersProvider()
     {
         return [
-            ['invalid order', 'asc', 20],       // invalid order.
-            ['list_order', 'invalid sort',20],  // invalid sort.
-            ['list_order', 'asc', 101],         // invalid limit.
+            // valid parameters.
+            ['list_order', 'asc', 20, true],
+            ['created', 'desc', 100, true],
+
+            // invalid order.
+            ['invalid order', 'asc', 20, false],
+
+            // invalid sort.
+            ['list_order', 'invalid sort', 20, false],
+
+            // invalid limit.
+            ['list_order', 'asc', 101, false],
         ];
     }
 
