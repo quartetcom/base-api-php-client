@@ -63,4 +63,13 @@ class Item implements EntityInterface
      * @var Subset\Variation[]
      */
     public $variations;
+
+    public $shop_id;
+    public $shop_name;
+    public $shop_url;
+
+    /**
+     * @var array
+     */
+    public $categories;
 }
