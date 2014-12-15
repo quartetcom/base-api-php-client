@@ -66,7 +66,7 @@ class Client
      * @param string $method
      * @param string $relativeUrl
      * @param array $params
-     * @return \Guzzle\Http\Message\Response|null
+     * @return array
      * @throws Exception\BaseApiErrorResponseException
      * @throws Exception\RuntimeException
      * @throws Exception\RateLimitExceededException
@@ -81,7 +81,7 @@ class Client
 
         try {
             $response = $this->httpClient->send($request);
-            $body = json_decode($response->getBody(), true);
+            $body = json_decode($response->getBody(), true) or [];
 
             return $body;
 
