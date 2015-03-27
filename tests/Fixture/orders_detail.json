@@ -37,6 +37,10 @@
             "collected_fee":null,
             "status":null
         },
+        "bt_payment_transaction":{
+          "collected_fee":null,
+          "status":null
+        },
         "order_items":[
             {
                 "order_item_id":123,
