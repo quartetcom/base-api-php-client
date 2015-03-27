@@ -36,6 +36,11 @@ class Order extends ContactInformation implements EntityInterface
     public $cvs_payment_transaction;
 
     /**
+     * @var Subset\BtPaymentTransaction
+     */
+    public $bt_payment_transaction;
+
+    /**
      * @var Subset\OrderItem[]
      */
     public $order_items;
