@@ -4,27 +4,30 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d11bc6a27edc5e45dfcdcb7441c4a8f1",
+    "hash": "99c012fcd799ed6d9a9c8d3b09f5786c",
     "packages": [
         {
             "name": "cakephp/utility",
-            "version": "3.0.0-beta3",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/utility.git",
-                "reference": "dc263ab9c1f855e9e60739834d1025b23e42b05f"
+                "reference": "0beb095ca3d2bdc5901a1d1de7d63ca156ade90d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/utility/zipball/dc263ab9c1f855e9e60739834d1025b23e42b05f",
-                "reference": "dc263ab9c1f855e9e60739834d1025b23e42b05f",
+                "url": "https://api.github.com/repos/cakephp/utility/zipball/0beb095ca3d2bdc5901a1d1de7d63ca156ade90d",
+                "reference": "0beb095ca3d2bdc5901a1d1de7d63ca156ade90d",
                 "shasum": ""
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Cake\\Utility\\": "."
-                }
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -37,7 +40,7 @@
                 }
             ],
             "description": "CakePHP Utility classes such as Inflector, String, Hash, and Security",
-            "time": "2014-11-08 16:31:36"
+            "time": "2015-04-19 06:55:19"
         },
         {
             "name": "guzzle/guzzle",
@@ -1103,7 +1106,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "cakephp/utility": 10,
         "phake/phake": 20
     },
     "prefer-stable": false,
