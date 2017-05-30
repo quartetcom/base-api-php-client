@@ -1,10 +1,12 @@
 <?php
 namespace Quartet\BaseApi;
 
-use Guzzle\Http\ClientInterface;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Phake;
+use Psr\Http\Message\ResponseInterface;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,13 +18,15 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function test_request()
     {
         // mock http response.
-        $response = Phake::mock('\Guzzle\Http\Message\Response');
+        $response = Phake::mock(ResponseInterface::class);
         Phake::when($response)->getBody()->thenReturn(json_encode(['json' => 'test']));
 
         // mock http client.
-        $httpClient = Phake::mock('\Guzzle\Http\Client');
-        Phake::when($httpClient)->createRequest('method', '/path/to/api', ['Authorization' => 'Bearer access_token'], null, ['param' => 1])->thenReturn('request');
-        Phake::when($httpClient)->send('request')->thenReturn($response);
+        $httpClient = Phake::mock(ClientInterface::class);
+        Phake::when($httpClient)->request('method', '/path/to/api', [
+            'headers' => ['Authorization' => 'Bearer access_token'],
+            'form_params' => ['param' => 1],
+            ])->thenReturn($response);
 
         $client = $this->buildClient(null, $httpClient);
         $client->token = new AccessToken(['access_token' => 'access_token']);
@@ -44,14 +48,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function test_request_with_http_errors($idx, $exception)
     {
         // mock http response.
-        $response = Phake::mock('\Guzzle\Http\Message\Response');
+        $response = Phake::mock(ResponseInterface::class);
         Phake::when($response)->getBody()->thenReturn(json_encode(['json' => 'test']));
 
         // mock http client.
-        $httpClient = Phake::mock('\Guzzle\Http\Client');
-        Phake::when($httpClient)->createRequest(Phake::anyParameters())->thenReturn('request')->thenReturn('second request');
-        Phake::when($httpClient)->send('request')->thenThrow($exception);
-        Phake::when($httpClient)->send('second request')->thenReturn($response);
+        $httpClient = Phake::mock(ClientInterface::class);
+        Phake::when($httpClient)->request(Phake::anyParameters())->thenThrow($exception);
 
         $token = new AccessToken([
             'access_token' => 'access token',
@@ -67,6 +69,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         switch ($idx) {
             case 0:
+                Phake::when($httpClient)->request(Phake::anyParameters())->thenReturn($response);
                 $data = $client->request('method', '/path/to/api');
                 $this->assertEquals(['json' => 'test'], $data);
                 break;
@@ -175,11 +178,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     private function getResponseException(array $responseBody = ['error' => 'error', 'error_description' => 'error description'])
     {
         // mock response.
-        $response = Phake::mock('\Guzzle\Http\Message\Response');
+        $response = Phake::mock(ResponseInterface::class);
         Phake::when($response)->getBody()->thenReturn(json_encode($responseBody));
 
         // mock response exception.
-        $responseException = Phake::mock('\Guzzle\Http\Exception\BadResponseException');
+        $responseException = Phake::mock(RequestException::class);
         Phake::when($responseException)->getResponse()->thenReturn($response);
 
         return $responseException;
