@@ -4,7 +4,7 @@ namespace Quartet\BaseApi;
 use Guzzle\Http\Client as HttpClient;
 use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Exception\BadResponseException;
-use League\OAuth2\Client\Provider\ProviderInterface;
+use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Quartet\BaseApi\Exception\AccessTokenExpiredException;
 use Quartet\BaseApi\Exception\BaseApiErrorResponseException;
@@ -24,7 +24,7 @@ class Client
     public $token;
 
     /**
-     * @var ProviderInterface
+     * @var AbstractProvider
      */
     private $provider;
 
@@ -38,10 +38,10 @@ class Client
      * @param string $clientSecret
      * @param string $redirectUri
      * @param array $scopes
-     * @param ProviderInterface $provider
+     * @param AbstractProvider $provider
      * @param ClientInterface $httpClient
      */
-    public function __construct($clientId, $clientSecret, $redirectUri, $scopes = [], ProviderInterface $provider = null, ClientInterface $httpClient = null)
+    public function __construct($clientId, $clientSecret, $redirectUri, $scopes = [], AbstractProvider $provider = null, ClientInterface $httpClient = null)
     {
         if (is_null($provider)) {
             $this->provider = new Base([
@@ -77,7 +77,7 @@ class Client
             throw new RuntimeException('Not authorized yet.');
         }
 
-        $request = $this->httpClient->createRequest($method, $relativeUrl, ['Authorization' => "Bearer {$this->token->accessToken}"], null, $params);
+        $request = $this->httpClient->createRequest($method, $relativeUrl, ['Authorization' => "Bearer {$this->token->getToken()}"], null, $params);
 
         try {
             $response = $this->httpClient->send($request);
@@ -141,7 +141,7 @@ class Client
     {
         try {
             $this->token = $this->provider->getAccessToken('refresh_token', [
-                'refresh_token' => $this->token->refreshToken,
+                'refresh_token' => $this->token->getRefreshToken(),
             ]);
         } catch (BadResponseException $e) {
             throw new AccessTokenExpiredException(self::REFRESH_TOKEN_EXPIRED_MESSAGE);
