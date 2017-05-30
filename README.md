@@ -12,7 +12,7 @@ PHP client library for accessing [BASE API](https://developers.thebase.in/).
 
 ## Requirements
 
-* PHP 5.4+
+* PHP 5.5+
 
 ## Getting started
 
