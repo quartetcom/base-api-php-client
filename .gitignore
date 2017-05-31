@@ -9,6 +9,6 @@ nbproject
 */logs/*
 */cache/*
 build/
-
+composer.lock
 vendor/
 composer.phar
